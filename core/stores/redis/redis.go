@@ -640,6 +640,29 @@ func (s *Redis) GetBitCtx(ctx context.Context, key string, offset int64) (val in
 	return
 }
 
+// GetSet is the implementation of redis getset command.
+func (s *Redis) GetSet(key, value string) (string, error) {
+	return s.GetSetCtx(context.Background(), key, value)
+}
+
+// GetSetCtx is the implementation of redis getset command.
+func (s *Redis) GetSetCtx(ctx context.Context, key, value string) (val string, err error) {
+	err = s.brk.DoWithAcceptable(func() error {
+		conn, err := getRedis(s)
+		if err != nil {
+			return err
+		}
+
+		if val, err = conn.GetSet(ctx, key, value).Result(); err == red.Nil {
+			return nil
+		}
+
+		return err
+	}, acceptable)
+
+	return
+}
+
 // Hdel is the implementation of redis hdel command.
 func (s *Redis) Hdel(key string, fields ...string) (bool, error) {
 	return s.HdelCtx(context.Background(), key, fields...)
