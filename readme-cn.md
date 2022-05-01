@@ -19,7 +19,7 @@
 > 
 > `GOPROXY=https://goproxy.cn/,direct go install github.com/zeromicro/go-zero/tools/goctl@latest`
 > 
-> `goctl migrate —verbose —version v1.3.1`
+> `goctl migrate —verbose —version v1.3.3`
 
 ## 0. go-zero 介绍
 
@@ -116,6 +116,16 @@ GO111MODULE=on GOPROXY=https://goproxy.cn/,direct go get -u github.com/zeromicro
     
     # Go 1.16 及以后版本
     GOPROXY=https://goproxy.cn/,direct go install github.com/zeromicro/go-zero/tools/goctl@latest
+
+    # docker for amd64 architecture
+    docker pull kevinwan/goctl
+    # run goctl like
+    docker run --rm -it -v `pwd`:/app kevinwan/goctl goctl --help
+
+    # docker for arm64 (M1) architecture
+    docker pull kevinwan/goctl:latest-arm64
+    # run goctl like
+    docker run --rm -it -v `pwd`:/app kevinwan/goctl:latest-arm64 goctl --help
     ```
 
     确保 goctl 可执行
@@ -252,6 +262,7 @@ go-zero 已被许多公司用于生产部署，接入场景如在线教育、电
 >58. 七牛云
 >59. 费芮网络
 >60. 51CTO
+>61. 聿旌科技
 
 如果贵公司也已使用 go-zero，欢迎在 [登记地址](https://github.com/zeromicro/go-zero/issues/602) 登记，仅仅为了推广，不做其它用途。
 

@@ -12,7 +12,7 @@ import (
 	"github.com/zeromicro/go-zero/tools/goctl/util/pathx"
 )
 
-// JavaCommand the generate java code command entrance
+// JavaCommand generates java code command entrance.
 func JavaCommand(c *cli.Context) error {
 	apiFile := c.String("api")
 	dir := c.String("dir")
@@ -25,6 +25,10 @@ func JavaCommand(c *cli.Context) error {
 
 	api, err := parser.Parse(apiFile)
 	if err != nil {
+		return err
+	}
+
+	if err := api.Validate(); err != nil {
 		return err
 	}
 

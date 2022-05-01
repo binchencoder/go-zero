@@ -58,6 +58,21 @@ var commands = []cli.Command{
 		},
 		Subcommands: []cli.Command{
 			{
+				Name:   "install",
+				Usage:  "goctl env installation",
+				Action: env.Install,
+				Flags: []cli.Flag{
+					cli.BoolFlag{
+						Name:  "force,f",
+						Usage: "silent installation of non-existent dependencies",
+					},
+					cli.BoolFlag{
+						Name:  "verbose, v",
+						Usage: "enable log output",
+					},
+				},
+			},
+			{
 				Name:  "check",
 				Usage: "detect goctl env and dependency tools",
 				Flags: []cli.Flag{
@@ -101,7 +116,7 @@ var commands = []cli.Command{
 		Flags: []cli.Flag{
 			cli.StringFlag{
 				Name:  "o",
-				Usage: "the output api file",
+				Usage: "output a sample api file",
 			},
 			cli.StringFlag{
 				Name: "home",
@@ -122,9 +137,10 @@ var commands = []cli.Command{
 		Action: apigen.ApiCommand,
 		Subcommands: []cli.Command{
 			{
-				Name:   "new",
-				Usage:  "fast create api service",
-				Action: new.CreateServiceCommand,
+				Name:      "new",
+				Usage:     "fast create api service",
+				UsageText: "example: goctl api new [options] service-name",
+				Action:    new.CreateServiceCommand,
 				Flags: []cli.Flag{
 					cli.StringFlag{
 						Name: "home",
@@ -494,11 +510,42 @@ var commands = []cli.Command{
 	{
 		Name:  "rpc",
 		Usage: "generate rpc code",
+		Flags: []cli.Flag{
+			cli.StringFlag{
+				Name:  "o",
+				Usage: "output a sample proto file",
+			},
+			cli.StringFlag{
+				Name: "home",
+				Usage: "the goctl home path of the template, --home and --remote cannot be set at the same time, " +
+					"if they are, --remote has higher priority",
+			},
+			cli.StringFlag{
+				Name: "remote",
+				Usage: "the remote git repo of the template, --home and --remote cannot be set at the same time, " +
+					"if they are, --remote has higher priority\n\tThe git repo directory must be consistent with the " +
+					"https://github.com/zeromicro/go-zero-template directory structure",
+			},
+			cli.StringFlag{
+				Name:  "branch",
+				Usage: "the branch of the remote repo, it does work with --remote",
+			},
+		},
+		Action: rpc.RPCTemplate,
 		Subcommands: []cli.Command{
 			{
-				Name:  "new",
-				Usage: `generate rpc demo service`,
+				Name:      "new",
+				Usage:     `generate rpc demo service`,
+				UsageText: "example: goctl rpc new [options] service-name",
 				Flags: []cli.Flag{
+					cli.StringSliceFlag{
+						Name:   "go_opt",
+						Hidden: true,
+					},
+					cli.StringSliceFlag{
+						Name:   "go-grpc_opt",
+						Hidden: true,
+					},
 					cli.StringFlag{
 						Name:  "style",
 						Usage: "the file naming format, see [https://github.com/zeromicro/go-zero/tree/master/tools/goctl/config/readme.md]",
@@ -535,7 +582,7 @@ var commands = []cli.Command{
 				Flags: []cli.Flag{
 					cli.StringFlag{
 						Name:  "out, o",
-						Usage: "the target path of proto",
+						Usage: "the target path of proto (deprecated)",
 					},
 					cli.StringFlag{
 						Name: "home",
@@ -678,7 +725,7 @@ var commands = []cli.Command{
 								Name:  "url",
 								Usage: `the data source of database,like "root:password@tcp(127.0.0.1:3306)/database"`,
 							},
-							cli.StringFlag{
+							cli.StringSliceFlag{
 								Name:  "table, t",
 								Usage: `the table or table globbing patterns in the database`,
 							},
